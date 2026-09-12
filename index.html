@@ -506,7 +506,7 @@
     recipientName: "Dad",
     // Set the real target date/time for the countdown, e.g. "2026-09-20T00:00:00"
     // For this demo it's set to a few seconds after page load so you can see the whole flow.
-    targetDate: new Date(Date.now() + 5000).toISOString(),
+    targetDate: new Date(Date.now() + 3000).toISOString(),
     letterParagraphs: [
       "Happy birthday, Dad! Today is a truly special day, because it's the birthday of the man who's given me more than I could ever repay.",
       "Thank you for the years of hard work, the quiet sacrifices, and for always showing up for our family even when it wasn't easy. So much of who I am today, I owe to you.",
@@ -805,28 +805,32 @@
   function tryStartMusic(){
     if(musicPlaying) return;
     bgAudio.muted = false;
-    bgAudio.play().then(markPlaying).catch(()=>{ /* still blocked — next interaction will retry */ });
+    bgAudio.play().then(()=>{
+      markPlaying();
+      detachInteractionListeners();
+    }).catch(()=>{ /* still blocked — listeners stay attached and will retry on the next interaction */ });
   }
 
   // Attempt right away — some browsers (e.g. a returning visitor with enough
   // "media engagement") allow this and music starts instantly.
   tryStartMusic();
 
-  // Reliable cross-browser fallback: browsers (iOS Safari especially) only
-  // allow audio to start from inside a genuine user-gesture event handler,
-  // so this listens for the visitor's very first tap/click/keypress anywhere
-  // on the page and starts the music right there. In practice this means the
-  // song starts the instant they touch the page at all — as close to "plays
-  // on open" as browsers allow, and it will not get permanently stuck off.
-  function firstInteraction(){
-    tryStartMusic();
-    window.removeEventListener('pointerdown', firstInteraction);
-    window.removeEventListener('touchend', firstInteraction);
-    window.removeEventListener('keydown', firstInteraction);
+  // Reliable cross-browser fallback: browsers only allow audio to start from
+  // inside a genuine, completed user-gesture event. iOS Safari in particular
+  // does NOT count the start of a touch (touchstart/pointerdown) as valid —
+  // only a completed tap (touchend), a click, or a real keypress. The
+  // listeners are only removed once playback actually succeeds, so an early
+  // attempt failing (e.g. on the very first touchstart) never leaves the site
+  // without a working trigger — it just keeps listening and tries again on
+  // the next tap.
+  function detachInteractionListeners(){
+    window.removeEventListener('touchend', tryStartMusic);
+    window.removeEventListener('click', tryStartMusic);
+    window.removeEventListener('keydown', tryStartMusic);
   }
-  window.addEventListener('pointerdown', firstInteraction, { passive:true });
-  window.addEventListener('touchend', firstInteraction, { passive:true });
-  window.addEventListener('keydown', firstInteraction);
+  window.addEventListener('touchend', tryStartMusic, { passive:true });
+  window.addEventListener('click', tryStartMusic);
+  window.addEventListener('keydown', tryStartMusic);
 
   creditTag.addEventListener('click', ()=>{
     if(!musicPlaying){
