@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Happy Birthday, Dad</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-1:#141a22;
+    --bg-2:#1f2c3a;
+    --bg-3:#2a3540;
+    --bg-4:#12161c;
+    --card-bg: rgba(255,255,255,0.05);
+    --card-bg-strong: rgba(10,14,18,0.55);
+    --card-border: rgba(255,255,255,0.14);
+    --text-primary:#f3ecdd;
+    --text-secondary: rgba(243,236,221,0.72);
+    --text-faint: rgba(243,236,221,0.45);
+    --accent:#d4af6a;
+    --accent-strong:#c9a35a;
+    --accent-soft: rgba(212,175,106,0.28);
+    --serif: 'Playfair Display', 'Georgia', serif;
+    --script: 'Cormorant Garamond', 'Georgia', serif;
+    --sans: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  *{ box-sizing: border-box; }
+  html,body{
+    margin:0; padding:0; height:100%;
+    background: var(--bg-1);
+    color: var(--text-primary);
+    font-family: var(--sans);
+    overflow-x:hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  body{
+    min-height:100svh;
+    background:
+      radial-gradient(ellipse 80% 60% at 30% 15%, rgba(60,80,105,0.55), transparent 60%),
+      radial-gradient(ellipse 70% 55% at 80% 85%, rgba(90,75,45,0.45), transparent 60%),
+      linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 45%, var(--bg-3) 75%, var(--bg-4) 100%);
+    background-attachment: fixed;
+    position:relative;
+  }
+  ::selection{ background: var(--accent-soft); color:#fff; }
+  a{ color: inherit; }
+  button{ font-family: inherit; }
+
+  /* ---------- background decor: stars + hearts ---------- */
+  .bg-decor{
+    position:fixed; inset:0; overflow:hidden; pointer-events:none; z-index:0;
+  }
+  .star{
+    position:absolute; width:2px; height:2px; border-radius:50%;
+    background: #fff; opacity:.5;
+    animation: twinkle linear infinite;
+  }
+  @keyframes twinkle{
+    0%,100%{ opacity:.15; transform:scale(1); }
+    50%{ opacity:.9; transform:scale(1.6); }
+  }
+  .heart-particle{
+    position:absolute; bottom:-10%; will-change: transform, opacity;
+    color: var(--accent);
+    opacity:.55;
+    filter: blur(0.4px);
+    animation-name: floatUp;
+    animation-timing-function: ease-in;
+    animation-iteration-count: infinite;
+  }
+  @keyframes floatUp{
+    0%{ transform: translateY(0) translateX(0) rotate(0deg); opacity:0; }
+    10%{ opacity:.55; }
+    50%{ transform: translateY(-55vh) translateX(15px) rotate(8deg); }
+    90%{ opacity:.35; }
+    100%{ transform: translateY(-105vh) translateX(-10px) rotate(-6deg); opacity:0; }
+  }
+
+  /* ---------- app shell ---------- */
+  .app{
+    position:relative; z-index:1;
+    min-height:100svh;
+    display:flex; align-items:center; justify-content:center;
+    padding: 32px 18px 90px;
+  }
+  .screen{
+    display:none;
+    width:100%; max-width: 760px;
+    flex-direction:column; align-items:center; text-align:center;
+    animation: screenIn .7s cubic-bezier(.2,.8,.2,1);
+  }
+  .screen.active{ display:flex; }
+  @keyframes screenIn{
+    from{ opacity:0; transform: translateY(18px) scale(.985); }
+    to{ opacity:1; transform: translateY(0) scale(1); }
+  }
+
+  .eyebrow{
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    display:flex; align-items:center; gap:10px;
+    margin-bottom: 18px;
+    opacity:.9;
+  }
+  .eyebrow .dot{ font-size:9px; opacity:.8; }
+
+  h1.display{
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 700;
+    font-size: clamp(30px, 6vw, 52px);
+    line-height:1.12;
+    margin: 0 0 6px;
+    text-shadow: 0 0 30px rgba(238,176,207,0.25);
+  }
+  h2.sub-display{
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(20px, 3.4vw, 30px);
+    margin: 0 0 14px;
+    color: var(--text-primary);
+    opacity:.92;
+  }
+  p.tagline{
+    font-family: var(--script);
+    font-size: clamp(14px, 2vw, 18px);
+    color: var(--text-secondary);
+    margin: 0 0 32px;
+    display:flex; align-items:center; gap:8px; justify-content:center;
+  }
+
+  .btn{
+    appearance:none; border:none; cursor:pointer;
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.28);
+    padding: 15px 34px;
+    border-radius: 999px;
+    display:inline-flex; align-items:center; gap:10px;
+    transition: all .25s ease;
+    backdrop-filter: blur(6px);
+  }
+  .btn:hover{
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(238,176,207,0.22);
+  }
+  .btn:active{ transform: translateY(0); }
+  .btn:focus-visible{ outline: 2px solid var(--accent); outline-offset: 3px; }
+  .btn-arrow{ transition: transform .25s ease; }
+  .btn:hover .btn-arrow{ transform: translateX(4px); }
+  .btn-accent{
+    background: linear-gradient(135deg, rgba(238,176,207,0.28), rgba(232,147,191,0.22));
+    border-color: rgba(238,176,207,0.55);
+  }
+  .btn-accent:hover{
+    background: linear-gradient(135deg, rgba(238,176,207,0.42), rgba(232,147,191,0.36));
+  }
+  .btn[disabled]{ opacity:.4; cursor:not-allowed; transform:none; }
+
+  .fade-in{ animation: simpleFade .6s ease both; }
+  @keyframes simpleFade{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+
+  /* ================= COUNTDOWN ================= */
+  .countdown-grid{
+    display:flex; gap: 14px; justify-content:center; flex-wrap:wrap;
+    margin: 8px 0 26px;
+  }
+  .cd-box{
+    background: var(--card-bg-strong);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 16px 10px 12px;
+    min-width: 74px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  }
+  .cd-box .num{
+    font-family: var(--serif); font-weight:700;
+    font-size: clamp(24px, 5vw, 34px);
+    line-height:1;
+    color:#fff;
+  }
+  .cd-box .lbl{
+    display:block; margin-top:8px;
+    font-size:9px; letter-spacing:2px; text-transform:uppercase;
+    color: var(--text-faint);
+  }
+  .cd-sep{ display:flex; align-items:center; color: var(--text-faint); font-size:20px; }
+  .cd-note{
+    font-family: var(--script); font-style:italic;
+    color: var(--text-secondary); font-size:15px; margin-bottom:22px;
+  }
+  .pill-status{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:10px 22px; border-radius:999px;
+    background: rgba(255,255,255,0.05);
+    border:1px solid var(--card-border);
+    font-size:11px; letter-spacing:1.5px; text-transform:uppercase;
+    color: var(--text-secondary);
+  }
+  .pill-status .pulse{
+    width:7px; height:7px; border-radius:50%; background: var(--accent);
+    animation: pulseDot 1.4s ease-in-out infinite;
+  }
+  @keyframes pulseDot{ 0%,100%{ opacity:.4; transform:scale(.8);} 50%{ opacity:1; transform:scale(1.15);} }
+  .cd-remaining{ font-size:12px; color: var(--text-faint); margin-top:10px; }
+
+  /* ================= GIFT ================= */
+  .gift-wrap{
+    margin: 18px 0 26px;
+    cursor:pointer;
+    background:none; border:none; padding:0;
+  }
+  .gift-glow{
+    width: 140px; height:140px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background: radial-gradient(circle, rgba(238,176,207,0.35), transparent 70%);
+    animation: giftPulse 2.4s ease-in-out infinite;
+  }
+  @keyframes giftPulse{ 0%,100%{ transform:scale(1); opacity:.85;} 50%{ transform:scale(1.08); opacity:1;} }
+  .gift-icon{ width:76px; height:76px; }
+  .gift-icon .box{ fill: rgba(255,255,255,0.08); stroke:#f3d9e6; stroke-width:2.2; }
+  .gift-icon .ribbon{ stroke:#f3d9e6; stroke-width:2.2; fill:none; }
+  .gift-hint{
+    font-family: var(--script); font-style:italic; color: var(--text-secondary);
+    font-size:15px; display:flex; gap:8px; align-items:center; justify-content:center;
+  }
+
+  /* ================= HERO ================= */
+  .hero-screen{ position:relative; padding-top: 10px; }
+  .polaroid{
+    position:absolute;
+    width: 96px; height:118px;
+    background:#f5f0e8;
+    border-radius: 3px;
+    padding: 6px 6px 18px;
+    box-shadow: 0 12px 24px rgba(0,0,0,0.35);
+    display:none;
+  }
+  .polaroid img{ width:100%; height:100%; object-fit:cover; display:block; border-radius:1px; }
+  @media (min-width: 760px){
+    .polaroid{ display:block; }
+    .p1{ top:-10px; left:-8%; transform: rotate(-9deg); }
+    .p2{ top:150px; left:-14%; transform: rotate(7deg); }
+    .p3{ top:-4px; right:-8%; transform: rotate(8deg); }
+    .p4{ top:150px; right:-13%; transform: rotate(-6deg); }
+  }
+  .credit-tag{
+    position:fixed; right:16px; bottom:16px; z-index:5;
+    font-size:11px; color: var(--text-faint);
+    display:flex; align-items:center; gap:6px;
+    background: rgba(15,10,18,0.35);
+    border:1px solid rgba(255,255,255,0.08);
+    padding:6px 12px; border-radius:999px;
+    backdrop-filter: blur(4px);
+  }
+  .credit-tag .dot-spin{
+    width:10px; height:10px; border-radius:50%;
+    background: radial-gradient(circle at 35% 35%, #fff, var(--accent) 60%);
+    animation: spin 3s linear infinite;
+  }
+  .credit-tag.paused .dot-spin{ animation-play-state: paused; }
+  @keyframes spin{ to{ transform: rotate(360deg); } }
+
+  /* ================= LETTER ================= */
+  .letter-card{
+    width:100%;
+    background: var(--card-bg-strong);
+    border:1px solid var(--card-border);
+    border-radius: 18px;
+    padding: 30px clamp(18px,4vw,40px);
+    text-align:left;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    max-height: 46vh;
+    overflow-y:auto;
+    cursor:pointer;
+  }
+  .letter-card::-webkit-scrollbar{ width:6px; }
+  .letter-card::-webkit-scrollbar-thumb{ background: rgba(255,255,255,0.15); border-radius:10px; }
+  .letter-body{
+    font-family: var(--script);
+    font-size: clamp(15px, 2vw, 18px);
+    line-height:1.85;
+    color: var(--text-primary);
+    white-space: pre-wrap;
+  }
+  .letter-body .cursor{
+    display:inline-block; width:2px; height:1em; background: var(--accent);
+    margin-left:2px; vertical-align:text-bottom;
+    animation: blink 1s step-start infinite;
+  }
+  @keyframes blink{ 50%{ opacity:0; } }
+  .letter-skip{
+    text-align:center; font-size:11px; color: var(--text-faint);
+    margin-top:14px; letter-spacing:1px;
+  }
+  .letter-next{ margin-top: 30px; }
+
+  /* ================= GALLERY ================= */
+  .gallery-grid{
+    display:grid; grid-template-columns: repeat(4, 1fr);
+    gap: 22px 16px;
+    margin: 10px 0 40px;
+    width:100%;
+  }
+  @media (max-width: 620px){
+    .gallery-grid{ grid-template-columns: repeat(2, 1fr); gap: 26px 14px; }
+  }
+  .g-photo{
+    background:#f5f0e8;
+    border-radius:3px;
+    padding: 6px 6px 14px;
+    box-shadow: 0 10px 22px rgba(0,0,0,0.35);
+    transition: transform .3s ease, box-shadow .3s ease;
+  }
+  .g-photo:hover{ transform: translateY(-6px) rotate(0deg) !important; box-shadow: 0 16px 30px rgba(0,0,0,0.45); z-index:2; }
+  .g-photo .ph{
+    width:100%; aspect-ratio: 3/3.6; border-radius:1px; overflow:hidden;
+    display:block;
+  }
+  .g-photo .ph img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+  /* ================= WISHES ================= */
+  .wishes-card{
+    width:100%;
+    background: var(--card-bg-strong);
+    border:1px solid var(--card-border);
+    border-radius:18px;
+    padding: 36px clamp(20px,5vw,50px) 32px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+  }
+  .wishes-card h1.display{ font-size: clamp(24px,4.4vw,34px); margin-bottom:14px; }
+  .wishes-greet{ font-size:14px; color: var(--text-secondary); margin-bottom:20px; }
+  .wishes-text{
+    font-family: var(--script);
+    font-size: clamp(15px,2vw,17px);
+    line-height:1.85;
+    color: var(--text-primary);
+  }
+  .wishes-heart{ margin: 22px 0 26px; font-size:20px; color: var(--accent); }
+
+  /* ================= FINAL ================= */
+  .final-heading{
+    font-family: var(--serif); font-weight:700;
+    font-size: clamp(30px, 7vw, 56px);
+    min-height: 1.3em;
+    margin-bottom: 18px;
+  }
+  .final-heading .cursor{
+    display:inline-block; width:3px; height:0.9em; background: var(--text-primary);
+    margin-left:3px; vertical-align:text-bottom; animation: blink 1s step-start infinite;
+  }
+  .final-lines{ color: var(--text-secondary); font-size: 14px; line-height:1.9; margin-bottom:14px; }
+  .final-forever{
+    font-family: var(--script); font-style:italic; font-size:18px;
+    color: var(--text-primary); margin-bottom: 30px;
+  }
+
+  /* small screens overall spacing */
+  @media (max-width: 480px){
+    .app{ padding: 22px 14px 90px; }
+    .letter-card{ max-height: 50vh; }
+    .credit-tag{ font-size:10px; padding:5px 10px; right:10px; bottom:10px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-decor" id="bgDecor"></div>
+
+<div class="app" id="app">
+
+  <!-- ============ SCREEN 1: COUNTDOWN ============ -->
+  <section class="screen active" id="screen-countdown">
+    <div class="eyebrow"><span class="dot">✦</span> Counting The Days <span class="dot">✦</span></div>
+    <h1 class="display" id="cdTitle">Dad's Special Day</h1>
+    <h2 class="sub-display">is Coming</h2>
+    <p class="tagline">A little celebration is on its way <span>★</span></p>
+
+    <div id="cdActive">
+      <div class="countdown-grid">
+        <div class="cd-box"><div class="num" id="cdDays">00</div><span class="lbl">Days</span></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-box"><div class="num" id="cdHours">00</div><span class="lbl">Hours</span></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-box"><div class="num" id="cdMinutes">00</div><span class="lbl">Minutes</span></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-box"><div class="num" id="cdSeconds">00</div><span class="lbl">Seconds</span></div>
+      </div>
+      <p class="cd-note">A few moments left...</p>
+      <div class="pill-status"><span class="pulse"></span> Wait for the right moment</div>
+      <div class="cd-remaining" id="cdRemainingText"></div>
+    </div>
+
+    <div id="cdDone" class="fade-in" style="display:none;">
+      <p class="cd-note" style="margin-bottom:26px;">Today is the special day!</p>
+      <button class="btn btn-accent" id="btnOpenGift">Open Dad's Gift <span class="btn-arrow">→</span></button>
+    </div>
+  </section>
+
+  <!-- ============ SCREEN 2: GIFT BOX ============ -->
+  <section class="screen" id="screen-gift">
+    <div class="eyebrow"><span class="dot">✦</span> There's Something For You, Dad <span class="dot">✦</span></div>
+    <button class="gift-wrap" id="btnGift" aria-label="Open your gift">
+      <div class="gift-glow">
+        <svg class="gift-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect class="box" x="8" y="26" width="48" height="30" rx="2"/>
+          <rect class="box" x="4" y="18" width="56" height="12" rx="2"/>
+          <path class="ribbon" d="M32 18V56"/>
+          <path class="ribbon" d="M32 18c-6-2-12-6-12-13 0-4 3-7 7-7 6 0 9 8 9 8"/>
+          <path class="ribbon" d="M32 18c6-2 12-6 12-13 0-4-3-7-7-7-6 0-9 8-9 8"/>
+        </svg>
+      </div>
+    </button>
+    <p class="gift-hint">✦ Click to open your gift ✦</p>
+  </section>
+
+  <!-- ============ SCREEN 3: HERO ============ -->
+  <section class="screen hero-screen" id="screen-hero">
+    <div class="polaroid p1"><img alt="" src=""></div>
+    <div class="polaroid p2"><img alt="" src=""></div>
+    <div class="polaroid p3"><img alt="" src=""></div>
+    <div class="polaroid p4"><img alt="" src=""></div>
+
+    <div class="eyebrow"><span class="dot">✦</span> A Letter For Dad <span class="dot">✦</span></div>
+    <h1 class="display">Happy Birthday, Dad</h1>
+    <p class="tagline">Created with love, just for you</p>
+    <button class="btn btn-accent" id="btnReadLetter">Read My Letter <span class="btn-arrow">→</span></button>
+  </section>
+
+  <!-- ============ SCREEN 4: LETTER ============ -->
+  <section class="screen" id="screen-letter">
+    <h1 class="display" style="margin-bottom:22px;">Happy Birthday</h1>
+    <div class="letter-card" id="letterCard">
+      <div class="letter-body" id="letterBody"></div>
+    </div>
+    <p class="letter-skip" id="letterSkipHint">Click the letter to reveal it all at once</p>
+    <button class="btn btn-accent letter-next" id="btnOurMemories" style="display:none;">Our Memories <span class="btn-arrow">→</span></button>
+  </section>
+
+  <!-- ============ SCREEN 5: GALLERY ============ -->
+  <section class="screen" id="screen-gallery">
+    <div class="eyebrow"><span class="dot">✦</span> Our Memories <span class="dot">✦</span></div>
+    <h1 class="display" style="font-size:clamp(26px,5vw,40px);">Our Memories</h1>
+    <p class="tagline">Every moment worth holding onto</p>
+    <div class="gallery-grid" id="galleryGrid"></div>
+    <button class="btn btn-accent" id="btnBirthdayWishes">Birthday Wishes <span class="btn-arrow">→</span></button>
+  </section>
+
+  <!-- ============ SCREEN 7: WISHES ============ -->
+  <section class="screen" id="screen-wishes">
+    <div class="wishes-card">
+      <h1 class="display">Birthday Wishes</h1>
+      <p class="wishes-greet">Happy Birthday, Dad <span style="color:var(--accent);">★</span></p>
+      <p class="wishes-text" id="wishesText"></p>
+      <div class="wishes-heart">★</div>
+      <button class="btn btn-accent" id="btnOneMoreThing">One More Thing <span class="btn-arrow">→</span></button>
+    </div>
+  </section>
+
+  <!-- ============ SCREEN 8: FINAL ============ -->
+  <section class="screen" id="screen-final">
+    <h1 class="final-heading" id="finalHeading">Happy Birthday<span class="cursor"></span></h1>
+    <div class="final-lines">
+      <div>Thank you for everything you've given me.</div>
+      <div>I hope this little gift can make your special day even brighter.</div>
+    </div>
+    <p class="final-forever">With love, always. <span style="color:var(--accent);">★</span></p>
+    <button class="btn" id="btnReplay">↻ Replay From Start</button>
+  </section>
+
+</div>
+
+<div class="credit-tag" id="creditTag">
+  <span class="dot-spin"></span>
+  <span id="creditText">our song · playing</span>
+</div>
+
+<audio id="bgAudio" loop preload="auto">
+  <source src="assets/music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+(function(){
+
+  /* ============================================================
+     EDIT THIS CONFIG TO PERSONALIZE THE SITE
+     ============================================================ */
+  const CONFIG = {
+    recipientName: "Dad",
+    // Set the real target date/time for the countdown, e.g. "2026-09-20T00:00:00"
+    // For this demo it's set to a few seconds after page load so you can see the whole flow.
+    targetDate: new Date(Date.now() + 5000).toISOString(),
+    letterParagraphs: [
+      "Happy birthday, Dad! Today is a truly special day, because it's the birthday of the man who's given me more than I could ever repay.",
+      "Thank you for the years of hard work, the quiet sacrifices, and for always showing up for our family even when it wasn't easy. So much of who I am today, I owe to you.",
+      "In this new year of your life, I only wish for good things to keep coming your way. Stay healthy, stay strong, and may everything you're working toward fall into place.",
+      "Keep being the steady, hardworking, and caring person you've always been. And don't forget — I'm always here for you too, no matter what.",
+      "Once again, happy birthday, Dad. I hope today is full of happiness, and that this year brings you more reasons to smile.",
+      "I love you, today, tomorrow, and always. ★"
+    ],
+    wishesParagraph: "I wish you happiness, good health, and endless blessings in this new chapter of your life. May your days be filled with peace, and every hard year of work finally pay off in ways you can enjoy. Thank you for being such a steady, wonderful part of my life. I hope this year brings you everything you deserve. Stay strong, stay healthy, and keep being you. I love you always.",
+    finalPhrases: ["Happy Birthday", "With All My Love", "Always & Forever"],
+    // Each photo points at a file in assets/photos/. Just replace those files
+    // (keep the same filenames: 1.jpg, 2.jpg, ... 8.jpg) with your own pictures.
+    // color1/color2 are only used as a fallback if a photo file is missing.
+    photos: [
+      { src:"assets/photos/1.jpg", color1:"#3a4a5c", color2:"#1f2a38" },
+      { src:"assets/photos/2.jpg", color1:"#5c4a2e", color2:"#2e2418" },
+      { src:"assets/photos/3.jpg", color1:"#4a5c4a", color2:"#243024" },
+      { src:"assets/photos/4.jpg", color1:"#5c3a3a", color2:"#301f1f" }
+    ],
+    musicLabel: "our song · playing",
+    // Milliseconds between each letter appearing in the typewriter effect.
+    // Higher = slower typing. 35-45 reads comfortably; try 60+ for a slow, dramatic reveal.
+    typingSpeedMs: 38
+  };
+
+  /* ============================================================
+     BACKGROUND DECOR — stars + floating stars
+     ============================================================ */
+  const bgDecor = document.getElementById('bgDecor');
+  function buildDecor(){
+    const frag = document.createDocumentFragment();
+    const starCount = window.innerWidth < 600 ? 40 : 70;
+    for(let i=0;i<starCount;i++){
+      const s = document.createElement('div');
+      s.className='star';
+      s.style.top = Math.random()*100+'%';
+      s.style.left = Math.random()*100+'%';
+      s.style.animationDuration = (2+Math.random()*3).toFixed(2)+'s';
+      s.style.animationDelay = (Math.random()*3).toFixed(2)+'s';
+      frag.appendChild(s);
+    }
+    const heartCount = window.innerWidth < 600 ? 10 : 16;
+    for(let i=0;i<heartCount;i++){
+      const h = document.createElement('div');
+      h.className='heart-particle';
+      h.textContent='★';
+      h.style.left = Math.random()*100+'%';
+      h.style.fontSize = (12+Math.random()*20).toFixed(0)+'px';
+      h.style.animationDuration = (9+Math.random()*10).toFixed(1)+'s';
+      h.style.animationDelay = (Math.random()*12).toFixed(1)+'s';
+      frag.appendChild(h);
+    }
+    bgDecor.appendChild(frag);
+  }
+  buildDecor();
+
+  /* ============================================================
+     SCREEN NAVIGATION
+     ============================================================ */
+  const screens = {};
+  document.querySelectorAll('.screen').forEach(s => screens[s.id] = s);
+  function goTo(id){
+    Object.values(screens).forEach(s => s.classList.remove('active'));
+    screens[id].classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
+    if(id === 'screen-letter') startLetter();
+    if(id === 'screen-gallery') buildGallery();
+    if(id === 'screen-wishes') startWishes();
+    if(id === 'screen-final') startFinalCycle();
+  }
+
+  /* ============================================================
+     SCREEN 1 — COUNTDOWN
+     ============================================================ */
+  const target = new Date(CONFIG.targetDate).getTime();
+  const elDays = document.getElementById('cdDays');
+  const elHours = document.getElementById('cdHours');
+  const elMinutes = document.getElementById('cdMinutes');
+  const elSeconds = document.getElementById('cdSeconds');
+  const elRemainingText = document.getElementById('cdRemainingText');
+  const cdActive = document.getElementById('cdActive');
+  const cdDone = document.getElementById('cdDone');
+  let countdownTimer = null;
+
+  function pad(n){ return String(n).padStart(2,'0'); }
+
+  function tickCountdown(){
+    const now = Date.now();
+    let diff = target - now;
+    if(diff <= 0){
+      clearInterval(countdownTimer);
+      elDays.textContent='00'; elHours.textContent='00'; elMinutes.textContent='00'; elSeconds.textContent='00';
+      cdActive.style.display='none';
+      cdDone.style.display='block';
+      return;
+    }
+    const d = Math.floor(diff/86400000);
+    const h = Math.floor(diff/3600000)%24;
+    const m = Math.floor(diff/60000)%60;
+    const s = Math.floor(diff/1000)%60;
+    elDays.textContent = pad(d);
+    elHours.textContent = pad(h);
+    elMinutes.textContent = pad(m);
+    elSeconds.textContent = pad(s);
+    elRemainingText.textContent = (s<=10 ? 'Just a few seconds left…' : '');
+  }
+  tickCountdown();
+  countdownTimer = setInterval(tickCountdown, 1000);
+
+  document.getElementById('btnOpenGift').addEventListener('click', ()=> goTo('screen-gift'));
+
+  /* ============================================================
+     SCREEN 2 — GIFT BOX
+     ============================================================ */
+  document.getElementById('btnGift').addEventListener('click', function(){
+    burstHearts();
+    setTimeout(()=> goTo('screen-hero'), 450);
+  });
+  function burstHearts(){
+    for(let i=0;i<14;i++){
+      const h = document.createElement('div');
+      h.textContent='★';
+      h.style.position='fixed';
+      h.style.left='50%'; h.style.top='55%';
+      h.style.color='var(--accent)';
+      h.style.fontSize=(14+Math.random()*18)+'px';
+      h.style.zIndex=50;
+      h.style.pointerEvents='none';
+      h.style.transition='transform 900ms ease-out, opacity 900ms ease-out';
+      document.body.appendChild(h);
+      const angle = Math.random()*Math.PI*2;
+      const dist = 80+Math.random()*160;
+      requestAnimationFrame(()=>{
+        h.style.transform = `translate(${Math.cos(angle)*dist}px, ${Math.sin(angle)*dist - 60}px) scale(1.4)`;
+        h.style.opacity='0';
+      });
+      setTimeout(()=> h.remove(), 950);
+    }
+  }
+
+  /* ============================================================
+     SCREEN 3 — HERO
+     ============================================================ */
+  function svgPolaroid(c1, c2){
+    const uid = 'g' + Math.random().toString(36).slice(2,9);
+    const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='200' height='240'>`+
+      `<defs><linearGradient id='${uid}' x1='0' y1='0' x2='1' y2='1'>`+
+      `<stop offset='0' stop-color='${c1}'/><stop offset='1' stop-color='${c2}'/>`+
+      `</linearGradient></defs>`+
+      `<rect width='200' height='240' fill='url(#${uid})'/>`+
+      `<text x='50%' y='56%' font-size='44' text-anchor='middle' fill='#ffffff' fill-opacity='0.85' font-family='Georgia, serif'>&#10084;</text>`+
+      `</svg>`;
+    return 'data:image/svg+xml,' + encodeURIComponent(svg);
+  }
+  document.querySelectorAll('#screen-hero .polaroid img').forEach((img, i)=>{
+    const p = CONFIG.photos[i % CONFIG.photos.length];
+    img.src = p.src;
+    img.onerror = function(){ this.onerror=null; this.src = svgPolaroid(p.color1, p.color2); };
+  });
+  document.getElementById('btnReadLetter').addEventListener('click', ()=> goTo('screen-letter'));
+
+  /* ============================================================
+     SCREEN 4 — LETTER (typewriter)
+     ============================================================ */
+  const letterBody = document.getElementById('letterBody');
+  const letterCard = document.getElementById('letterCard');
+  const btnOurMemories = document.getElementById('btnOurMemories');
+  const letterSkipHint = document.getElementById('letterSkipHint');
+  const fullLetterText = CONFIG.letterParagraphs
+    .map(p => p.replace(/\{name\}/g, CONFIG.recipientName))
+    .join('\n\n');
+  let letterStarted = false;
+  let letterTimer = null;
+  let letterDone = false;
+
+  function startLetter(){
+    if(letterStarted) return;
+    letterStarted = true;
+    letterBody.innerHTML = '<span class="cursor"></span>';
+    let i = 0;
+    letterTimer = setInterval(()=>{
+      if(i >= fullLetterText.length){
+        finishLetter();
+        return;
+      }
+      const chunk = fullLetterText.slice(0, i+1);
+      letterBody.innerHTML = chunk.replace(/\n/g,'<br>') + '<span class="cursor"></span>';
+      letterCard.scrollTop = letterCard.scrollHeight;
+      i++;
+    }, CONFIG.typingSpeedMs);
+  }
+  function finishLetter(){
+    clearInterval(letterTimer);
+    letterBody.innerHTML = fullLetterText.replace(/\n/g,'<br>');
+    letterDone = true;
+    letterSkipHint.style.display='none';
+    btnOurMemories.style.display='inline-flex';
+    btnOurMemories.classList.add('fade-in');
+  }
+  letterCard.addEventListener('click', ()=>{
+    if(!letterDone) finishLetter();
+  });
+  btnOurMemories.addEventListener('click', ()=> goTo('screen-gallery'));
+
+  /* ============================================================
+     SCREEN 5 — GALLERY
+     ============================================================ */
+  const galleryGrid = document.getElementById('galleryGrid');
+  let galleryBuilt = false;
+  const rotations = [-6,4,-3,7,5,-7,3,-4];
+  function buildGallery(){
+    if(galleryBuilt) return;
+    galleryBuilt = true;
+    CONFIG.photos.forEach((p, i)=>{
+      const div = document.createElement('div');
+      div.className='g-photo';
+      div.style.transform = `rotate(${rotations[i%rotations.length]}deg)`;
+      const ph = document.createElement('div');
+      ph.className='ph';
+      const img = document.createElement('img');
+      img.src = p.src;
+      img.alt = 'Memory '+(i+1);
+      img.onerror = function(){ this.onerror=null; this.src = svgPolaroid(p.color1, p.color2); };
+      ph.appendChild(img);
+      div.appendChild(ph);
+      galleryGrid.appendChild(div);
+    });
+  }
+  document.getElementById('btnBirthdayWishes').addEventListener('click', ()=> goTo('screen-wishes'));
+
+  /* ============================================================
+     SCREEN 7 — WISHES
+     ============================================================ */
+  const wishesText = document.getElementById('wishesText');
+  let wishesStarted = false;
+  function startWishes(){
+    if(wishesStarted) return;
+    wishesStarted = true;
+    wishesText.textContent = CONFIG.wishesParagraph;
+  }
+  document.getElementById('btnOneMoreThing').addEventListener('click', ()=> goTo('screen-final'));
+
+  /* ============================================================
+     SCREEN 8 — FINAL (cycling heading)
+     ============================================================ */
+  const finalHeading = document.getElementById('finalHeading');
+  let finalTimer = null;
+  let finalIndex = 0;
+  function startFinalCycle(){
+    if(finalTimer) return;
+    renderFinalPhrase();
+    finalTimer = setInterval(()=>{
+      finalIndex = (finalIndex+1) % CONFIG.finalPhrases.length;
+      renderFinalPhrase();
+    }, 2400);
+  }
+  function renderFinalPhrase(){
+    finalHeading.style.opacity = 0;
+    setTimeout(()=>{
+      finalHeading.innerHTML = CONFIG.finalPhrases[finalIndex] + '<span class="cursor"></span>';
+      finalHeading.style.transition = 'opacity .4s ease';
+      finalHeading.style.opacity = 1;
+    }, 220);
+  }
+  document.getElementById('btnReplay').addEventListener('click', ()=>{
+    // reset letter + wishes + final states, then go back to the gift screen
+    clearInterval(letterTimer);
+    letterStarted = false; letterDone = false;
+    letterBody.innerHTML = '';
+    btnOurMemories.style.display='none';
+    letterSkipHint.style.display='block';
+    wishesStarted = false; wishesText.textContent='';
+    clearInterval(finalTimer); finalTimer = null; finalIndex = 0;
+    goTo('screen-gift');
+  });
+
+  /* ============================================================
+     BACKGROUND MUSIC WIDGET
+     ============================================================ */
+  const bgAudio = document.getElementById('bgAudio');
+  const creditTag = document.getElementById('creditTag');
+  const creditText = document.getElementById('creditText');
+  creditText.textContent = CONFIG.musicLabel;
+  let musicPlaying = false;
+
+  function markPlaying(){
+    musicPlaying = true;
+    creditTag.classList.remove('paused');
+  }
+  function markPaused(){
+    musicPlaying = false;
+    creditTag.classList.add('paused');
+  }
+  creditTag.classList.add('paused');
+
+  function tryStartMusic(){
+    if(musicPlaying) return;
+    bgAudio.muted = false;
+    bgAudio.play().then(markPlaying).catch(()=>{ /* still blocked — next interaction will retry */ });
+  }
+
+  // Attempt right away — some browsers (e.g. a returning visitor with enough
+  // "media engagement") allow this and music starts instantly.
+  tryStartMusic();
+
+  // Reliable cross-browser fallback: browsers (iOS Safari especially) only
+  // allow audio to start from inside a genuine user-gesture event handler,
+  // so this listens for the visitor's very first tap/click/keypress anywhere
+  // on the page and starts the music right there. In practice this means the
+  // song starts the instant they touch the page at all — as close to "plays
+  // on open" as browsers allow, and it will not get permanently stuck off.
+  function firstInteraction(){
+    tryStartMusic();
+    window.removeEventListener('pointerdown', firstInteraction);
+    window.removeEventListener('touchend', firstInteraction);
+    window.removeEventListener('keydown', firstInteraction);
+  }
+  window.addEventListener('pointerdown', firstInteraction, { passive:true });
+  window.addEventListener('touchend', firstInteraction, { passive:true });
+  window.addEventListener('keydown', firstInteraction);
+
+  creditTag.addEventListener('click', ()=>{
+    if(!musicPlaying){
+      tryStartMusic();
+    } else {
+      bgAudio.pause();
+      markPaused();
+    }
+  });
+
+})();
+</script>
+</body>
+</html>
